@@ -31,6 +31,7 @@ const upload = multer({
 const Model = require('../../models/Model')
 
 router.post('/', upload.single('image'), (req, res) => {
+    res.send(req.body)
     if(req.file){
         req.file.path = fs.readFileSync(req.file.path, 'base64')
     }else {
@@ -48,7 +49,7 @@ router.post('/', upload.single('image'), (req, res) => {
         .then(item => {
             res.sendStatus(200)
         }).catch(err => {
-            res.sendStatus(500).json(err)
+            res.sendStatus(400)
         })
 })
 

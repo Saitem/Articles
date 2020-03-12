@@ -22,7 +22,7 @@ export default {
 
     async created() {
         try {
-            const response = await axios.get('http://localhost:5000/models')
+            const response = await axios.get('http://localhost:5000/api/models')
             this.models = response.data
         }catch(err) {
             this.error = err

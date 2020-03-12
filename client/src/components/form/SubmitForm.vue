@@ -40,7 +40,7 @@ export default {
             fd.append('image', this.file)
             
             try {
-                await axios.post('http://localhost:5000/models', fd)
+                await axios.post('http://localhost:5000/api/models', fd)
             }catch(e) {
                 this.error = true
             }

@@ -21,7 +21,7 @@ export default {
 
     async created() {
         try {
-            const response = await axios.get(`http://localhost:5000/models/${this.id}`)
+            const response = await axios.get(`http://localhost:5000/api/models/${this.id}`)
             this.model = response.data
         }catch(err) {
             this.error = err
@@ -30,7 +30,7 @@ export default {
 
     methods: {
          async deleteModel(id){
-            await axios.delete(`http://localhost:5000/models/${id}`)
+            await axios.delete(`http://localhost:5000/api/models/${id}`)
         }
     }
 
