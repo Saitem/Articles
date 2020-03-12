@@ -5,7 +5,7 @@ import Home from '../components/main/Home'
 import Detail from '../components/form/DetailsForm'
 import Login from '../components/auth/LoginForm'
 import Register from '../components/auth/RegisterForm'
-
+import User from '../components/auth/User'
 
 Vue.use(VueRouter)
 
@@ -34,6 +34,11 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register
+  },
+  {
+    path: '/user',
+    name: 'User',
+    component: User
   }
 ]
 
