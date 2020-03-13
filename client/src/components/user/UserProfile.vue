@@ -39,7 +39,18 @@ export default {
     logout() {
       localStorage.clear();
       this.$router.push('/login');
+    },
+
+    edit() {
+      const user = {
+        name: this.name,
+        email: this.email
+      }
+
+      axios.put(baseUrl, user,{ headers: { 'access_token': localStorage.getItem('token')}})
+      
     }
+
   }
 }
 </script>
@@ -48,29 +59,68 @@ export default {
 <template>
 
   <mdb-container>
-    <mdb-row  class="justify-content-md-center">
-      <div class="text-center">
-        <mdb-col col="12">
-            <img :src="userImage" class="img-fluid user_image" alt="user_image">
-        </mdb-col>
-        <mdb-col>
-          <mdb-input v-model="name">{{ name }}</mdb-input>
-          <mdb-input v-model="email">{{ email }}</mdb-input>
-        </mdb-col>  
-        <mdb-btn @click="logout">Log out</mdb-btn>
-      </div>
+    <mdb-row  class="justify-content-center user_profile">
+      <!-- <div class="text-center"> -->
+      <mdb-col class='canv_info'>
+        <mdb-row>
+          <mdb-col class="head" col=12>
+            <mdb-row>
+              <mdb-col col="4">
+                <div class="text-left">
+                  <img :src="userImage" class="img-fluid user_image" alt="user_image">
+                </div>
+              </mdb-col>
+              <mdb-row>
+                <mdb-col class="gen_name" col=12><h1>{{ name }} {{ lastname }}</h1></mdb-col>
+                <mdb-col col=12>{{ email }}</mdb-col>
+                <mdb-col col=12>{{ status }}</mdb-col>
+              </mdb-row>
+            </mdb-row>
+          </mdb-col>
+
+          <mdb-col class="info" col=12>
+            <mdb-row>
+              
+              <mdb-col col="12"><h2>Account</h2></mdb-col>
+              <hr>
+              <mdb-col col="6"><h5>Username</h5></mdb-col>
+              <mdb-col col="6"><mdb-input v-model="name"></mdb-input></mdb-col>
+              <mdb-col col="6"><h5>Email</h5></mdb-col>
+              <mdb-col col="6"><mdb-input v-model="email"></mdb-input></mdb-col>
+              <mdb-col col="6"><h5>Full name</h5></mdb-col>
+              <mdb-col col="6"><mdb-input></mdb-input></mdb-col>
+            </mdb-row>
+            <mdb-btn @click='edit'></mdb-btn>
+          </mdb-col>
+          </mdb-row>
+      </mdb-col>
     </mdb-row>
   </mdb-container>
-  <!-- <div>
-    <button @click="logout">logout</button>
-    <h3>Name: {{ name }}</h3>
-    <h3>Email: {{ email }}</h3>
-  </div> -->
 </template>
 
 <style lang="scss" scoped>
+  .user_profile {
+    padding-top: 30px;
+  }
+
+  .canv_info {
+    background-color: #fff;
+  }
+
+  .info {
+    padding-top: 20px;
+  }
+
+  .head {
+    padding-top: 20px;
+  }
+
+  h5 {
+    padding-top: 35px;
+  }
+
   .user_image{
-    width: 45%;
+    width: 55%;
     text-align: center;
     border-radius: 100%;
     border: 3px solid grey;
