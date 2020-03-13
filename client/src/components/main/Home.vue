@@ -53,7 +53,7 @@ export default {
 
 <template>
     <mdb-container>
-            <mdb-row  class="justify-content-md-center">
+        <mdb-row  class="justify-content-md-center">
                 <mdb-col
                     
                     col="6"

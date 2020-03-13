@@ -81,4 +81,17 @@ router.delete('/:id', async (req, res) => {
     
 })
 
+router.put('/:id', async (req, res) => {
+    let model 
+    try {
+        model = await Model.findById(req.params.id)
+        model.title = req.body.name
+        await model.save()
+        res.sendStatus(200)
+    }catch (err) {
+        res.sendStatus(500)
+    }
+
+})
+
 module.exports = router

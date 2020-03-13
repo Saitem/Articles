@@ -46,8 +46,10 @@ router.get('/info', (req, res) => {
 	const token = req.header('access_token')
 	jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
 		if(err) return res.status(401).send('Accses Denied')
+
 		User.findOne({ _id: decoded._id }, (err, user) => {
 			if (err) return console.log(err)
+
 			return res.status(200).json({
 				user: {
 					email: user.email,
@@ -56,7 +58,24 @@ router.get('/info', (req, res) => {
 			})
 		})
 	})
-	console.log(req.headers)
+})
+
+router.put('/info', (req, res) => {
+	const token = req.header('access_token')
+	jwt.verify(token, process.env.TOKEN_SECRET, async (err, decoded) => {
+		if(err) return res.status(401).send('Accses Denied')
+
+		let user 
+		try {
+			user = await User.findOne({_id: decoded._id})
+			user.name = req.body.name
+			user.lastname = req.body.lastname
+			await user.save()
+			res.sendStatus(200)
+		}catch (err) {
+			res.sendStatus(500)
+		}
+	})
 })
 
 module.exports = router
