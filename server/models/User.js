@@ -8,10 +8,15 @@ const userSchema = new Schema({
         max: 255,
         required: true
     },
-    lastname: {
+    fullname: {
         type: String,
         min: 2,
         max: 255
+    },
+    image: {
+        data: Buffer,
+        type: String,
+        default: ''
     },
     email: {
         type: String,

@@ -44,9 +44,10 @@ export default {
                     this.$router.push('/login')
                 }, err => {
                     console.log(err.message)
+                    this.error = 'Invalid email or password'
                 })
         }
-    }
+    },
 
 }
 
@@ -62,6 +63,7 @@ export default {
             <mdb-card-body class="mx-4">
               <div class="text-center">
                 <h3 class="dark-grey-text mb-5"><strong>Sign up</strong></h3>
+                {{error}}
               </div>
               <mdb-input label="Your name" type="text" v-model="name" />
               <mdb-input label="Your email" type="email" v-model="email" />

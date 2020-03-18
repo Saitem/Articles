@@ -43,7 +43,7 @@ export default {
             }
           }, err => {
             console.log(err.response)
-            this.error = err.response.data.error
+            this.error = 'Invalid email or password'
           })
       }
     }
@@ -61,6 +61,7 @@ export default {
             <mdb-card-body class="mx-4">
               <div class="text-center">
                 <h3 class="dark-grey-text mb-5"><strong>Sign in</strong></h3>
+                {{ error }}
               </div>
               <mdb-input label="Your email" type="email" v-model="email" />
               <mdb-input label="Your password" type="password" containerClass="mb-0" v-model="password" />

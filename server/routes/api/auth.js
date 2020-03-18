@@ -1,8 +1,10 @@
 const router = require('express').Router()
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const fs = require('fs')
 const User = require('../../models/User')
-const {registerValidation, loginValidation} = require('../../validation')
+const {registerValidation, loginValidation} = require('../../utils/validation')
+const { upload } = require('../../utils/FileUpload')
 
 router.post('/register', async (req, res) => {
 	const { error } = registerValidation(req.body)	
@@ -53,29 +55,46 @@ router.get('/info', (req, res) => {
 			return res.status(200).json({
 				user: {
 					email: user.email,
-					name: user.name
-				}
+					name: user.name,
+					fullname: user.fullname,
+					image: user.image
+				}	
 			})
 		})
 	})
 })
 
-router.put('/info', (req, res) => {
+router.put('/info', upload.single('image'), (req, res) => {
 	const token = req.header('access_token')
 	jwt.verify(token, process.env.TOKEN_SECRET, async (err, decoded) => {
 		if(err) return res.status(401).send('Accses Denied')
+		
+		if(req.file) req.file.path = fs.readFileSync(req.file.path, 'base64')
+		else req.file = ''
+
 
 		let user 
 		try {
 			user = await User.findOne({_id: decoded._id})
 			user.name = req.body.name
-			user.lastname = req.body.lastname
+			user.fullname = req.body.fullname
+			user.image = req.file.path
 			await user.save()
 			res.sendStatus(200)
 		}catch (err) {
 			res.sendStatus(500)
 		}
 	})
+})
+
+router.get('/users', (req, res) => {
+	User.find()
+		.then(item => {
+			res.json(item)
+		}).catch(err => {
+			console.log(err)
+			res.sendStatus(500)
+		})
 })
 
 module.exports = router

@@ -38,7 +38,6 @@ export default {
             fd.append('title', this.title)
             fd.append('description', this.description)
             fd.append('image', this.file)
-            
             try {
                 await axios.post('http://localhost:5000/api/models', fd)
             }catch(e) {

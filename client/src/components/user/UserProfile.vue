@@ -1,7 +1,7 @@
 <script>
 import axios from 'axios'
 import { mdbContainer, mdbRow, mdbCol, mdbInput, mdbBtn } from 'mdbvue';
-import userImage from '../../assets/user.svg'
+import replImage from '../../assets/userImage.png'
 
 const baseUrl = 'http://localhost:5000/user/info'
 
@@ -13,14 +13,18 @@ export default {
     mdbRow,
     mdbCol,
     mdbInput,
-    mdbBtn
+    mdbBtn,
+    // mdbFileInput
   },
 
   data() {
     return {
       name: '',
       email: '',
-      userImage: userImage
+      replImage,
+      userImage: '',
+      fullname: '',
+      status: ''
     }
   },    
   created() {
@@ -33,6 +37,9 @@ export default {
       .then(res => {
         this.name = res.data.user.name
         this.email = res.data.user.email
+        this.fullname = res.data.user.fullname
+        this.userImage = res.data.user.image
+        console.log(res.data.user.fullname)
       })
   },
   methods: {
@@ -41,15 +48,30 @@ export default {
       this.$router.push('/login');
     },
 
-    edit() {
-      const user = {
-        name: this.name,
-        email: this.email
-      }
+    selectFile() {
+      this.userImage = this.$refs.file.files[0]
+    },
 
-      axios.put(baseUrl, user,{ headers: { 'access_token': localStorage.getItem('token')}})
+    edit() {
+      const fd = new FormData()
+
+      // const user = {
+      //   name: this.name,
+      //   email: this.email,
+      //   fullname: this.fullname,
+      //   image: this.userImage
+      // }
+
+      fd.append('image', this.userImage)
+      fd.append('name', this.name)
+      fd.append('fullname', this.fullname)
+
+      axios.put(baseUrl, fd,{ headers: { 'access_token': localStorage.getItem('token')}})
       
     }
+  },
+
+  computed: {
 
   }
 }
@@ -67,11 +89,18 @@ export default {
             <mdb-row>
               <mdb-col col="4">
                 <div class="text-left">
-                  <img :src="userImage" class="img-fluid user_image" alt="user_image">
+                  <img v-if="userImage === ''" :src="replImage" class="img-fluid user_image" alt="user_image" />
+                  <img 
+                    v-if='userImage !== ""' 
+                    :src="`data:image/${'png' || 'jpeg' || 'jpg'};base64,${userImage}`" 
+                    alt=""
+                    class="user_image"
+                  />
+                  <input type="file" ref="file" @change="selectFile" class="image_uploader" />
                 </div>
               </mdb-col>
               <mdb-row>
-                <mdb-col class="gen_name" col=12><h1>{{ name }} {{ lastname }}</h1></mdb-col>
+                <mdb-col class="gen_name" col=12><h1>{{ name }}</h1></mdb-col>
                 <mdb-col col=12>{{ email }}</mdb-col>
                 <mdb-col col=12>{{ status }}</mdb-col>
               </mdb-row>
@@ -88,9 +117,10 @@ export default {
               <mdb-col col="6"><h5>Email</h5></mdb-col>
               <mdb-col col="6"><mdb-input v-model="email"></mdb-input></mdb-col>
               <mdb-col col="6"><h5>Full name</h5></mdb-col>
-              <mdb-col col="6"><mdb-input></mdb-input></mdb-col>
+              <mdb-col col="6"><mdb-input v-model="fullname"></mdb-input></mdb-col>
             </mdb-row>
-            <mdb-btn @click='edit'></mdb-btn>
+            <mdb-btn @click='edit'>Save</mdb-btn>
+            <mdb-btn @clicl="logout">Log out</mdb-btn>
           </mdb-col>
           </mdb-row>
       </mdb-col>
@@ -118,11 +148,7 @@ export default {
   h5 {
     padding-top: 35px;
   }
-
-  .user_image{
-    width: 55%;
-    text-align: center;
-    border-radius: 100%;
-    border: 3px solid grey;
+  .user_image {
+    width: 60%;
   }
 </style>
