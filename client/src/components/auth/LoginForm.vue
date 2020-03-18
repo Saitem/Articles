@@ -39,7 +39,7 @@ export default {
           .then(res => {
             if (res.status === 200) {
               localStorage.setItem('token', res.data);
-              this.$router.push('/user');
+              this.$router.push('/personal_profile');
             }
           }, err => {
             console.log(err.response)

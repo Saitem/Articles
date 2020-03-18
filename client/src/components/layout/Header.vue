@@ -32,7 +32,7 @@
       <mdb-navbar-nav right>
         <mdb-nav-item to="/register">Register</mdb-nav-item>
         <mdb-nav-item to="/login">Log in</mdb-nav-item>
-        <mdb-nav-item to="/user">Profile</mdb-nav-item>
+        <mdb-nav-item to="/personal_profile">Profile</mdb-nav-item>
       </mdb-navbar-nav>
     </mdb-navbar-toggler>
   </mdb-navbar>

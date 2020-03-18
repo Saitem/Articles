@@ -5,7 +5,7 @@ import Home from '../components/main/Home'
 import Detail from '../components/form/DetailsForm'
 import Login from '../components/auth/LoginForm'
 import Register from '../components/auth/RegisterForm'
-import UserProfile from '../components/user/UserProfile'
+import PersonalProfile from '../components/user/PersonalProfile'
 import Users from '../components/main/Users'
 
 Vue.use(VueRouter)
@@ -37,9 +37,9 @@ const routes = [
     component: Register
   },
   {
-    path: '/user',
-    name: 'User',
-    component: UserProfile
+    path: '/personal_profile',
+    name: 'PersonalProfile',
+    component: PersonalProfile
   },
   {
     path: '/users',
