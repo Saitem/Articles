@@ -87,6 +87,7 @@ router.put('/info', upload.single('image'), (req, res) => {
 	})
 })
 
+
 router.get('/users', (req, res) => {
 	User.find()
 		.then(item => {
@@ -95,6 +96,16 @@ router.get('/users', (req, res) => {
 			console.log(err)
 			res.sendStatus(500)
 		})
+})
+
+router.get('/user/:id', (req, res) => {
+	User.findById({ _id: req.params.id })
+	.then(item => {
+		res.json(item)
+	}).catch(err => {
+		console.log(err)
+		res.sendStatus(500)
+	})
 })
 
 module.exports = router

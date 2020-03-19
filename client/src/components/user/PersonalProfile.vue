@@ -24,6 +24,7 @@ export default {
       replImage,
       userImage: '',
       fullname: '',
+      nickname: '',
       status: ''
     }
   },    
@@ -54,13 +55,6 @@ export default {
 
     edit() {
       const fd = new FormData()
-
-      // const user = {
-      //   name: this.name,
-      //   email: this.email,
-      //   fullname: this.fullname,
-      //   image: this.userImage
-      // }
 
       fd.append('image', this.userImage)
       fd.append('name', this.name)

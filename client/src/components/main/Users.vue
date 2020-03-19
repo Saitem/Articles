@@ -31,12 +31,10 @@ export default {
     },
 
     methods: {
-    
+        userProfile(id) {
+            this.$router.push({name: 'User', params: {id: id}})
+        },
     },
-
-    computed: { 
-           
-    }
 }
 </script>
 
@@ -70,7 +68,7 @@ export default {
                                   />
                                 </div>
                               </mdb-col>
-                              <mdb-col>{{ user.name }}</mdb-col>
+                              <mdb-col><h5 @click="userProfile(user._id)">{{ user.name }}</h5></mdb-col>
                             </mdb-row>
                             
                         </mdb-col>
