@@ -34,6 +34,7 @@ export default {
         register() {
             const newUser = {
                 name: this.name,
+                userId: this.id,
                 email: this.email,
                 password: this.password
             }

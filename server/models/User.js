@@ -1,7 +1,12 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
+const ObjectId = Schema.ObjectId
 
 const userSchema = new Schema({
+    _id: {
+        type: ObjectId,
+        required: true
+    },
     name: {
         type: String,
         min: 2,

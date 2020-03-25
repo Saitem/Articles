@@ -1,10 +1,11 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
+const ObjectId = Schema.ObjectId
 
-
-const modelSchema = new Schema({
+const modelSchema = Schema({
     title: {
-        type: String
+        type: String,
+        required: true
     },
     description: {
         type: String
@@ -13,10 +14,19 @@ const modelSchema = new Schema({
         data: Buffer,
         type: String,
         default: ''
-        },
+    },
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    creator_id: {
+        type: ObjectId,
+        require: true,
+        ref: 'User'
+    },
+    creator_name: {
+        type: String,
+        require: true
     }
 })
 

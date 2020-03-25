@@ -1,40 +1,49 @@
 const express = require('express')
 const router = express.Router()
 const fs = require('fs')
+const jwt = require('jsonwebtoken')
 const { upload } = require('../../utils/FileUpload')
 
 const Model = require('../../models/Model')
+const User = require('../../models/User')
 
 router.post('/', upload.single('image'), (req, res) => {
-    res.send(req.body)
-    if(req.file){
-        req.file.path = fs.readFileSync(req.file.path, 'base64')
-    }else {
-        req.file = ''
-    }
-    
-    const model = Model({
-        title: req.body.title,
-        description: req.body.description,
-        image: req.file.path,
-        createdAt: req.body.createdAt
-    })
+    const token = req.header('access_token')
+	jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
+        User.findById({ _id: decoded._id })
+        .then(result => {
         
-    model.save()
-        .then(item => {
-            res.sendStatus(200)
-        }).catch(err => {
-            res.sendStatus(400)
+            if(req.file)
+                req.file.path = fs.readFileSync(req.file.path, 'base64')
+            else 
+                req.file = ''
+                
+            const model = new Model({
+                title: req.body.title,
+                description: req.body.description,
+                image: req.file.path,
+                creator_id: result._id,
+                creator_name: result.name
+            })
+
+            model.save()
+                .then(item => {
+                    res.send(item)
+                }).catch(err => {
+                    res.send(err)
+                })
         })
+    })
 })
 
 router.get('/', (req, res) => {
     Model.find()
-        .then(item => {
-            res.send(item)
-        }).catch(err => {
-            res.status(500).json({ err })
-        })
+    .then(item => {
+        item = item.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        return res.status(200).send(item)
+    }).catch(err => {
+        return res.status(500).send(err)
+    })
 })
 
 router.get('/:id', (req, res) => {

@@ -41,13 +41,11 @@ export default {
         async deleteModel(id){
             await axios.delete(`http://localhost:5000/models/${id}`)
         },
+        
+        userProfile(id) {
+            this.$router.push({name: 'User', params: {id: id}})
+        },
     },
-
-        computed: { 
-            filtering()  {
-                return this.models.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-            }
-        }
 }
 </script>
 
@@ -61,15 +59,15 @@ export default {
                     <mdb-row>
 
                         <mdb-col
-                            v-for="(model, index) in filtering"
+                            v-for="(model, index) in models"
                             :key="index" 
                             class="post" 
                             col='12'
                         >
                             <mdb-row>
                                 <mdb-col class="creation">
-                                    <img class='img_creator' src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1200px-Unofficial_JavaScript_logo_2.svg.png" alt="">
-                                    <b>Creation</b> 
+                                    <!-- <img class='img_creator' src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1200px-Unofficial_JavaScript_logo_2.svg.png" alt=""> -->
+                                    <b @click="userProfile(model.creator_id)">{{ model.creator_name }}</b> 
                                         {{ formatDate(new Date(model.createdAt)) }}
                                 </mdb-col>
                                 <div class="w-100"></div>

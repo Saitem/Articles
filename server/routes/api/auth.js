@@ -2,7 +2,10 @@ const router = require('express').Router()
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const fs = require('fs')
+const mongoose = require('mongoose')
+
 const User = require('../../models/User')
+
 const {registerValidation, loginValidation} = require('../../utils/validation')
 const { upload } = require('../../utils/FileUpload')
 
@@ -13,18 +16,22 @@ router.post('/register', async (req, res) => {
 	const emailExist = await User.findOne({ email: req.body.email })
 	if(emailExist) return res.status(400).send('Email already exist')
 
+	const usernameExist = await User.findOne({ name: req.body.name })
+	if(usernameExist) return res.status(400).send('Username already exist')
+
 	const salt = await bcrypt.genSalt(10)
 	const hashedPassword = await bcrypt.hash(req.body.password, salt)
 
-	const user = new User({
+	const user = new User({	
+		_id: new mongoose.Types.ObjectId(),
 		name: req.body.name,
 		email: req.body.email,
-		password: hashedPassword
+		password: hashedPassword,
 	})	
 
 	try {
 		const savedUser = user.save()
-		res.send({ user: user._id })
+		res.send({ user: user._id })	
 	} catch (err) {
 		res.status(400).send(err)
 	}
@@ -57,8 +64,9 @@ router.get('/info', (req, res) => {
 					email: user.email,
 					name: user.name,
 					fullname: user.fullname,
-					image: user.image
-				}	
+					image: user.image,
+					_id: user._id
+				}
 			})
 		})
 	})
@@ -69,9 +77,11 @@ router.put('/info', upload.single('image'), (req, res) => {
 	jwt.verify(token, process.env.TOKEN_SECRET, async (err, decoded) => {
 		if(err) return res.status(401).send('Accses Denied')
 		
+		const usernameExist = await User.findOne({ name: req.body.name })
+		if(usernameExist) return res.status(400).send('Username already exist')
+		
 		if(req.file) req.file.path = fs.readFileSync(req.file.path, 'base64')
 		else req.file = ''
-
 
 		let user 
 		try {
@@ -79,6 +89,7 @@ router.put('/info', upload.single('image'), (req, res) => {
 			user.name = req.body.name
 			user.fullname = req.body.fullname
 			user.image = req.file.path
+			
 			await user.save()
 			res.sendStatus(200)
 		}catch (err) {

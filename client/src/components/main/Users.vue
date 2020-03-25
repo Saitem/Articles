@@ -1,12 +1,12 @@
 <script>
 import axios from 'axios'
-import { mdbContainer, mdbRow, mdbCol } from 'mdbvue';
+import { mdbContainer, mdbRow, mdbCol, mdbInput } from 'mdbvue';
 import replImage from '../../assets/userImage.png'
 
 export default {
     name: "Home",
     components: {
-        // mdbInput,
+        mdbInput,
         mdbContainer,
         mdbRow,
         mdbCol,
@@ -17,7 +17,8 @@ export default {
         return {
             users: [],
             error: '',
-            replImage
+            replImage,
+            search: ''
         }
     },
 
@@ -35,6 +36,12 @@ export default {
             this.$router.push({name: 'User', params: {id: id}})
         },
     },
+
+    computed: {
+        searchUser() {
+            return this.users.filter(user => user.name.toLowerCase().includes(this.search.toLowerCase()))
+        }
+    },
 }
 </script>
 
@@ -46,9 +53,9 @@ export default {
                     col="4"
                 >
                     <mdb-row>
-
+                        <mdb-input label="Username" icon="user" v-model="search" />
                         <mdb-col
-                          v-for="(user, index) in users"
+                          v-for="(user, index) in searchUser"
                           :key="index" 
                           class="post" 
                           col='12'

@@ -31,9 +31,13 @@ app.use(cors())
 
 app.use(morgan('dev'))
 // app.use(express.bodyParser())
+
+// app.use(bodyParser.json())
 app.use(express.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+
+app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use('/api/models', modelRoute)
 app.use('/user', authRoute)
 

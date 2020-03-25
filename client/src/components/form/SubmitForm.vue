@@ -21,7 +21,6 @@ export default {
             file: '',
             message: '',
             error: false
-            // image: ''
         }
     },
 
@@ -38,8 +37,9 @@ export default {
             fd.append('title', this.title)
             fd.append('description', this.description)
             fd.append('image', this.file)
+           
             try {
-                await axios.post('http://localhost:5000/api/models', fd)
+                await axios.post('http://localhost:5000/api/models', fd, { headers: { 'access_token': localStorage.getItem('token')}})
             }catch(e) {
                 this.error = true
             }

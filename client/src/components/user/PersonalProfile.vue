@@ -25,7 +25,10 @@ export default {
       userImage: '',
       fullname: '',
       nickname: '',
-      status: ''
+      userId: '',
+      status: '',
+      error: '',
+      message: ''
     }
   },    
   created() {
@@ -40,7 +43,7 @@ export default {
         this.email = res.data.user.email
         this.fullname = res.data.user.fullname
         this.userImage = res.data.user.image
-        console.log(res.data.user.fullname)
+        this.userId = res.data.user._id
       })
   },
   methods: {
@@ -59,14 +62,16 @@ export default {
       fd.append('image', this.userImage)
       fd.append('name', this.name)
       fd.append('fullname', this.fullname)
-
-      axios.put(baseUrl, fd,{ headers: { 'access_token': localStorage.getItem('token')}})
       
+      axios.put(baseUrl, fd,{ headers: { 'access_token': localStorage.getItem('token')}})
+        .then(res => {
+          if(res.status === 200) 
+            this.message = 'Changes made'
+        }).catch(err => {
+          console.log(err)
+          this.error = 'Username already exist'
+        })   
     }
-  },
-
-  computed: {
-
   }
 }
 </script>
@@ -94,6 +99,8 @@ export default {
                 </div>
               </mdb-col>
               <mdb-row>
+                {{message}}
+                {{error}}
                 <mdb-col class="gen_name" col=12><h1>{{ name }}</h1></mdb-col>
                 <mdb-col col=12>{{ email }}</mdb-col>
                 <mdb-col col=12>{{ status }}</mdb-col>
@@ -112,9 +119,11 @@ export default {
               <mdb-col col="6"><mdb-input v-model="email"></mdb-input></mdb-col>
               <mdb-col col="6"><h5>Full name</h5></mdb-col>
               <mdb-col col="6"><mdb-input v-model="fullname"></mdb-input></mdb-col>
+              <mdb-col col="6"><h5>User id</h5></mdb-col>
+              <mdb-col col="6"><mdb-input v-model="userId"></mdb-input></mdb-col>
             </mdb-row>
             <mdb-btn @click='edit'>Save</mdb-btn>
-            <mdb-btn @clicl="logout">Log out</mdb-btn>
+            <mdb-btn @click='logout'>Log out</mdb-btn>
           </mdb-col>
           </mdb-row>
       </mdb-col>

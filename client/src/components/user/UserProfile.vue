@@ -76,6 +76,8 @@ export default {
                     <mdb-col col="6">{{ user.email }}</mdb-col>
                     <mdb-col col="6"><h5>Full name</h5></mdb-col>
                     <mdb-col col="6">{{ user.fullname }}</mdb-col>
+                    <mdb-col col="6"><h5>User id</h5></mdb-col>
+                    <mdb-col col="6">{{ user.fullname }}</mdb-col>
                 </mdb-row>
             </mdb-col>
           </mdb-row>
